@@ -40,8 +40,11 @@ void * count_char(void * thread_arg){
         data->count += 1;
     }while(fgetc(ifile) != EOF);
     fclose(ifile);
-    for(int i = strlen(nname)-3;i<strlen(nname);i++){
-        nname[i] = NULL;
+    for(int i = strlen(nname)-1;i>0;i--){
+        if(nname[i]!="."){
+            nname[i] = NULL;
+        }
+        break;
     }
     strcat(nname,ext);
     FILE * ofile = fopen(nname,"w");
