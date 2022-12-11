@@ -3,11 +3,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdlib.h>
-//La fork sarebbe la funzione che crea un processo
-//può avere valori che partono da 0 fino a inf
-//dipende da quanti processi vengono creati.
-//Se il valore è < 0 c'è stato un problema con la creazione
-//Il valore 0 rappresenta il processo in esecuzione al momento
+/*La fork sarebbe la funzione che clona il processo chiamante
+può assumere il valore -1 per errori e 0 */
+
 void orphan(void){
     pid_t p;
     
