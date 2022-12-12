@@ -43,8 +43,7 @@ void * count_char(void * thread_arg){
     for(int i = strlen(nname)-1;i>0;i--){
         if(nname[i]!="."){
             nname[i] = NULL;
-        }
-        break;
+        }else{break;}
     }
     strcat(nname,ext);
     FILE * ofile = fopen(nname,"w");
@@ -58,44 +57,40 @@ int main(){
     pthread_t threads[MAX_THREAD_NUM];
     struct FileCount *file,*a;
     char choise;
-    int i,sign;
+    int i;
     signal(SIGINT,&main);
-    while(1){
-        printf("\ns)Sequence\nf)File Count\nq)Quit\nChoose an option:");
-        scanf(" %c",&choise);
-        switch(choise){
-            case 's':
-                printf("\nHow many sequence do you want to print?: ");
-                scanf("%d",&i);
-                if(i > 20){printf("\nTo many thread to create, please type a number equal or smaller than 20.\n");break;}
-                struct Sequence **seq;
-                seq = (struct Seqeuence*)malloc(sizeof(struct Sequence*));
-                for(int j = 0;j<i;j++){
-                    seq[j] = Get_seq();
-                }
-                do{
-                for(int j = 0;j<i;j++){pthread_create(&threads[j],NULL,&print_char,(void*)seq[j]);}
-                
+    printf("\ns)Sequence\nf)File Count\nq)Quit\nChoose an option:");
+    scanf(" %c",&choise);
+    switch(choise){
+        case 's':
+            printf("\nHow many sequence do you want to print?: ");
+            scanf("%d",&i);
+            if(i > 20){printf("\nTo many thread to create, please type a number equal or smaller than 20.\n");break;}
+            struct Sequence **seq;
+            seq = (struct Seqeuence*)malloc(sizeof(struct Sequence*));
+            for(int j = 0;j<i;j++){
+                seq[j] = Get_seq();
+            }
+            do{
+                for(int j = 0;j<i;j++){pthread_create(&threads[j],NULL,&print_char,(void*)seq[j]);}           
                 for(int j = 0;j<i;j++){pthread_join(threads[j],NULL);}
-                }while(1);
+            }while(1);
             break;
-            case 'f':
-                file = (struct FileCount*)malloc(sizeof(struct FileCount));
-                file->filename = (char*)malloc(20);
-                printf("\nType the name of the file(include extension): ");
-                fscanf(stdin,"%s",file->filename);
-                printf("\n");
-                pthread_create(&thread_id,NULL,&count_char,(void*)file);
-                pthread_join(thread_id,&a);
-                printf("%d",a->count);
-                free(file);
-            break;
-            case 'q':
-                printf("\nGoodbye\n");
-                exit(0);
-            default:
-                printf("\nInvalid character typed, try again.\n");
-
+        case 'f':
+            file = (struct FileCount*)malloc(sizeof(struct FileCount));
+            file->filename = (char*)malloc(20);
+            printf("\nType the name of the file(include extension): ");
+            fscanf(stdin,"%s",file->filename);
+            printf("\n");
+            pthread_create(&thread_id,NULL,&count_char,(void*)file);
+            pthread_join(thread_id,&a);
+            printf("%d",a->count);
+            free(file);
+        break;
+        case 'q':
+            printf("\nGoodbye\n");
+            exit(0);
+        default:
+            printf("\nInvalid character typed, try again.\n");
         }
-    }
 }
