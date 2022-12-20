@@ -82,24 +82,14 @@ int main(){
     int dim;
     signal(INVCHAR,&main);
     printf("\nValues must be inserted as positive integer followed by the notation Kb,Mb after the value.\nType the dimension of the buffer: ");
-    scanf("%d%s",&value,mult);
-    switch(mult[0]){
-        case 'k' :
-        case 'K' :
-            dim = value*2048;
-        break;
-        case 'm' :
-        case 'M' :
-            dim = value*(2048*2048);
-        break;
-        default:
-            if(mult == ""){
-                dim = value;
-            }else{
-                printf("\nInvalid value typed.\n");
-                raise(INVCHAR);
-            }
-        break;
+    scanf("%d %s",&value,mult);
+    if(mult[0] == 'm' || mult[0] == 'M'){
+        dim = value*(2048*2048);
+    }else if(mult[0] == 'k' || mult[0] == 'K'){
+        dim = value*2048;
+    }else{
+        printf("\nInvalid value typed...\nRemember to use the correct notation.\n");
+        raise(INVCHAR);
     }
     buffer_init(dim);
     while(buffer->end <= buffer->dim){
